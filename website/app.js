@@ -50,7 +50,7 @@ const postData = async (url = '', data = {}) => {
 const constructURL = (zip) => {
   const baseURL = 'http://api.openweathermap.org/data/2.5/weather?APPID=';
   const apiKey = 'fb1948a23afb212f015f7d1655335092';
-  const zipPart = '&q=' + zip;
+  const zipPart = '&q=' + zip + ',us';
   const units = '&units=imperial'
   return baseURL + apiKey + zipPart + units;
 };
