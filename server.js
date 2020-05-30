@@ -31,7 +31,7 @@ app.get('/all', (req, res) => {
   res.send(projectData);
 });
 
-app.post('/feeling', (req, res) => {
+app.post('/entry', (req, res) => {
   projectData.data.push(req.body);
   console.log(projectData);
 });
