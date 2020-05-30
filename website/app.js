@@ -19,4 +19,16 @@ const weatherData = async (url = '') => {
   }
 };
 
-weatherData(requestURL);
+const appData = async (url = '') => {
+  const request = await fetch(url);
+  try {
+    const data = await request.json();
+    console.log(data);
+  }
+  catch(error) {
+    console.log("error", error);
+  }
+};
+
+// weatherData(requestURL);
+appData('/all');
