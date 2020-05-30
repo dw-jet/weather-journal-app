@@ -15,7 +15,7 @@ const weatherData = async (url = '') => {
     console.log(data);
   }
   catch(error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
@@ -30,5 +30,25 @@ const appData = async (url = '') => {
   }
 };
 
+const postData = async (url = '', data = {}) => {
+  const response = await fetch(url, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  try {
+    const newData = await response.json();
+    return newData;
+  }
+  catch(error) {
+    console.log('error', error);
+  }
+};
+
 // weatherData(requestURL);
-appData('/all');
+// appData('/all');
+postData('/feeling', {feeling: "Pretty good!"});
