@@ -3,13 +3,41 @@
 
 // Create a new date instance dynamically with JS
 let d = new Date();
+// Since month is zero based I added one to it
 let newDate = d.getMonth()+1+'.'+ d.getDate()+'.'+ d.getFullYear();
 
+// Helper functions
+const constructURL = (zip) => {
+  const baseURL = 'http://api.openweathermap.org/data/2.5/weather?APPID=';
+  const apiKey = 'fb1948a23afb212f015f7d1655335092';
+  const zipPart = '&q=' + zip + ',us';
+  const units = '&units=imperial'
+  return baseURL + apiKey + zipPart + units;
+};
+
+const clearInputsHelper = () => {
+  const zip = document.getElementById('zip');
+  const feelings = document.getElementById('feelings');
+  zip.value = "";
+  feelings.value = "";
+}
+
+const showLatest = (entries) => {
+    clearInputsHelper();
+    lastEntry = entries.data.pop();
+    dateDiv = document.getElementById('date');
+    tempDiv = document.getElementById('temp');
+    contentDiv = document.getElementById('content');
+    dateDiv.innerHTML = `<p>Date: ${lastEntry.date}</p>`;
+    tempDiv.innerHTML = `<p>Temp: ${lastEntry.temp}</p>`;
+    contentDiv.innerHTML = `<p>Feelings: ${lastEntry.feelings}</p>`;
+}
+
+// Async post and get functions
 const weatherData = async (url = '') => {
   const request = await fetch(url);
   try {
     const data = await request.json();
-    console.log(data);
     return data;
   }
   catch(error) {
@@ -21,6 +49,7 @@ const appData = async (url = '') => {
   const request = await fetch(url);
   try {
     const data = await request.json();
+    showLatest(data);
     return data;
   }
   catch(error) {
@@ -47,13 +76,7 @@ const postData = async (url = '', data = {}) => {
   }
 };
 
-const constructURL = (zip) => {
-  const baseURL = 'http://api.openweathermap.org/data/2.5/weather?APPID=';
-  const apiKey = 'fb1948a23afb212f015f7d1655335092';
-  const zipPart = '&q=' + zip + ',us';
-  const units = '&units=imperial'
-  return baseURL + apiKey + zipPart + units;
-};
+// Bring everything together when generate is clicked
 
 const postEntry = () => {
   const zip = document.getElementById('zip').value;
@@ -65,29 +88,8 @@ const postEntry = () => {
         date: newDate,
         feelings: feelings,
         temp: data.main.temp})
-    .then(showLatest())
+    .then(appData('/all'))
   })
-}
-
-const clearInputsHelper = () => {
-  const zip = document.getElementById('zip');
-  const feelings = document.getElementById('feelings');
-  zip.value = "";
-  feelings.value = "";
-}
-
-const showLatest = () => {
-    clearInputsHelper();
-    appData('/all')
-    .then(function(entries) {
-      lastEntry = entries.data.pop();
-      dateDiv = document.getElementById('date');
-      tempDiv = document.getElementById('temp');
-      contentDiv = document.getElementById('content');
-      dateDiv.textContent = lastEntry.date;
-      tempDiv.textContent = lastEntry.temp;
-      contentDiv.textContent = lastEntry.feelings;
-    })
 }
 
 document.getElementById('generate').addEventListener('click', postEntry)
