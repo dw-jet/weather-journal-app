@@ -16,5 +16,8 @@ npm start
 ```
 5. Navigate to http://localhost:3030 and fill out the on screen form.
 
+## TODO
+Move API key handling to environment variable
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
